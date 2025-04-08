@@ -6,10 +6,12 @@ RUN pip install pipenv
 
 COPY Pipfile Pipfile.lock /app/
 
+RUN pipenv lock
+
 RUN pipenv install --deploy --ignore-pipfile
 
 COPY . .
 
-RUN pipenv install pylint black
+EXPOSE 5000
 
-CMD ["pipenv", "run", "pylint", "app.py"]
+CMD ["pipenv", "run", "python", "app.py"]
