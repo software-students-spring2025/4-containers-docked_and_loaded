@@ -2,12 +2,16 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+RUN pip install pipenv
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY Pipfile Pipfile.lock /app/
+
+RUN pipenv lock
+
+RUN pipenv install --deploy --ignore-pipfile
 
 COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD ["pipenv", "run", "python", "app.py"]
