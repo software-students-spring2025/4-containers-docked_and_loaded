@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 pylint = "*"
+flask = "*"
+pymongo = "*"
+tomli = "*"
+typing_extensions = "*"
 black = "*"
 
 [dev-packages]
