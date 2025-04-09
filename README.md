@@ -7,6 +7,7 @@ Build a containerized app that uses machine learning. See [instructions](./instr
 ## 🔧 Environment Setup
 
 Each service in this project requires its own `.env` file to configure the MongoDB connection.  
+
 Use the provided `env.example` files in each directory to create your own `.env` files:
 
 ### 1. Machine Learning Client
@@ -18,5 +19,3 @@ Use the provided `env.example` files in each directory to create your own `.env`
 
 - Path: `web-app/.env`
 - Template: `web-app/env.example`
-
-
