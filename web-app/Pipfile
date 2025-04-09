@@ -9,6 +9,8 @@ black = "*"
 flask = "*"
 pymongo = "*"
 tomli = "*"
+typing_extensions = "*"
+
 
 [dev-packages]
 
