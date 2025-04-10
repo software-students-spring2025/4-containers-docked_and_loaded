@@ -5,13 +5,13 @@ name = "pypi"
 
 [packages]
 flask = "*"
-dotenv = "*"
 openai = "*"
 pymongo = "*"
 numpy = "*"
 black = "*"
 pandas = "*"
 pylint = "*"
+dotenv = "*"
 
 [dev-packages]
 
