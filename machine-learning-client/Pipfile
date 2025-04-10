@@ -5,13 +5,15 @@ name = "pypi"
 
 [packages]
 flask = "*"
-pymongo = "*"
-openai = "*"
-pandas = "*"
 dotenv = "*"
+openai = "*"
+pymongo = "*"
 numpy = "*"
+black = "*"
+pandas = "*"
+pylint = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.13"
+python_version = "3.10"
