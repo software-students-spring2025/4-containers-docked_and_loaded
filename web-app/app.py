@@ -8,8 +8,8 @@ from flask_login import (
     LoginManager,
     login_user,
     login_required,
-    current_user,
     UserMixin,
+    logout_user,
 )
 
 from flask_pymongo import PyMongo
@@ -55,7 +55,7 @@ def root():
 @login_required
 def home():
     """Home"""
-    return f"Welcome, {current_user.username}! You are logged in."
+    return render_template("home.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -97,6 +97,17 @@ def register():
         return redirect(url_for("home"))
 
     return render_template("register.html")
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    """
+    logout function
+    """
+    logout_user()
+    flash("You have been logged out.", "success")
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
