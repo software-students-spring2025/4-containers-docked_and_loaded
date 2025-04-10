@@ -7,8 +7,11 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_login import (
     LoginManager,
     login_user,
+    login_required,
+    current_user,
     UserMixin,
 )
+
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
@@ -49,11 +52,20 @@ def load_user(user_id):
 
 
 @app.route("/")
+def root():
+    """
+    Redirect root path to login.
+    """
+    return redirect(url_for("login"))
+
+@app.route("/home")
+@login_required
 def home():
     """
     Home
     """
-    return "Hello! Go to /login or /register"
+    return f"Welcome, {current_user.username}! You are logged in."
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -95,6 +107,7 @@ def register():
         return redirect(url_for("dashboard"))
 
     return render_template("register.html")
+
 
 
 if __name__ == "__main__":
