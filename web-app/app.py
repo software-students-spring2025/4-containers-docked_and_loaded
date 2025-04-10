@@ -3,7 +3,7 @@ flask
 """
 
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import (
     LoginManager,
     login_user,
@@ -14,15 +14,14 @@ from flask_login import (
 
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 app = Flask(__name__)
 app.secret_key = "your-secret-key"
 
-app.config["MONGO_URI"] = (
-    f"mongodb://{os.getenv('MONGO_USER')}:{os.getenv('MONGO_PASS')}@"
-    f"{os.getenv('MONGO_HOST')}:{os.getenv('MONGO_PORT')}/"
-    f"{os.getenv('MONGO_DB')}?authSource=admin"
-)
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 mongo = PyMongo(app)
 
 login_manager = LoginManager()
@@ -31,83 +30,58 @@ login_manager.login_view = "login"
 
 
 class User(UserMixin):
-    """
-    flask-login
-    """
-
     def __init__(self, user_id, username):
         self.id = user_id
         self.username = username
 
-
 @login_manager.user_loader
 def load_user(user_id):
-    """
-    Load a user by ID from MongoDB.
-    """
     user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
     if user:
         return User(user_id=str(user["_id"]), username=user["username"])
     return None
 
-
 @app.route("/")
 def root():
-    """
-    Redirect root path to login.
-    """
     return redirect(url_for("login"))
-
 
 @app.route("/home")
 @login_required
 def home():
-    """
-    Home
-    """
     return f"Welcome, {current_user.username}! You are logged in."
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """
-    login
-    """
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
         user = mongo.db.users.find_one({"username": username})
-        if user and user["password"] == password:
+        if user and check_password_hash(user["password"], password):
             login_user(User(user_id=str(user["_id"]), username=user["username"]))
             return redirect(url_for("home"))
-        return render_template("login.html", message="Invalid username or password.")
-
+        flash("Invalid username or password.", "danger")
     return render_template("login.html")
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """
-    register
-    """
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
         existing_user = mongo.db.users.find_one({"username": username})
         if existing_user:
-            return render_template("register.html", message="Username already exists.")
+            flash("Username already exists.", "danger")
+            return render_template("register.html")
 
         user_id = mongo.db.users.insert_one(
-            {"username": username, "password": password}
+            {"username": username, "password": generate_password_hash(password)}
         ).inserted_id
 
         login_user(User(user_id=str(user_id), username=username))
-        return redirect(url_for("dashboard"))
+        return redirect(url_for("home"))
 
     return render_template("register.html")
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
