@@ -29,6 +29,8 @@ login_manager.login_view = "login"
 
 
 class User(UserMixin):
+    """User class for Flask-Login."""
+
     def __init__(self, user_id, username):
         self.id = user_id
         self.username = username
@@ -36,6 +38,7 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Load a user by ID from the MongoDB"""
     user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
     if user:
         return User(user_id=str(user["_id"]), username=user["username"])
@@ -44,17 +47,20 @@ def load_user(user_id):
 
 @app.route("/")
 def root():
+    """Redirect to Login"""
     return redirect(url_for("login"))
 
 
 @app.route("/home")
 @login_required
 def home():
+    """Home"""
     return f"Welcome, {current_user.username}! You are logged in."
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """login"""
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -69,6 +75,7 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """register"""
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -89,4 +96,5 @@ def register():
 
 
 if __name__ == "__main__":
+    """main"""
     app.run(host="0.0.0.0", port=5000)
