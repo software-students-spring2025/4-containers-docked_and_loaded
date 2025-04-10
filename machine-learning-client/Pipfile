@@ -4,14 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pylint = "*"
-black = "*"
-pandas = "*"
-numpy = "*"
-openai = "*"
+flask = "*"
 pymongo = "*"
+openai = "*"
+pandas = "*"
+dotenv = "*"
+numpy = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.13"

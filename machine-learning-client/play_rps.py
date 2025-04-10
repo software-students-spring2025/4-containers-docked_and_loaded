@@ -5,5 +5,3 @@ import numpy
 
 def play_random():
     return random.randrange(0,3)
-
-print(play_random())
