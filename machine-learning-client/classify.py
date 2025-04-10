@@ -19,9 +19,9 @@ def classify_rps(image_path):
 
     image = encode_image(image_path)
 
-    prompt = """This image contains a person playing the game rock paper scissors. 
+    prompt = """This image contains a person playing the game rock paper scissors.
     Determine which of the three options they chose and output it as a single word."""
-    
+
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[

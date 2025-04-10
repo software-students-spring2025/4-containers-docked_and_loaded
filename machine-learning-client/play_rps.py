@@ -7,4 +7,5 @@ import random
 # import numpy
 
 def play_random():
+    """Randomly choose rock, paper, or scissors"""
     return random.randrange(0,3)
