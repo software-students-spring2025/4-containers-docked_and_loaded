@@ -58,6 +58,7 @@ def root():
     """
     return redirect(url_for("login"))
 
+
 @app.route("/home")
 @login_required
 def home():
@@ -65,7 +66,6 @@ def home():
     Home
     """
     return f"Welcome, {current_user.username}! You are logged in."
-
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -107,7 +107,6 @@ def register():
         return redirect(url_for("dashboard"))
 
     return render_template("register.html")
-
 
 
 if __name__ == "__main__":
