@@ -8,7 +8,6 @@ from flask_login import (
     LoginManager,
     login_user,
     login_required,
-    current_user,
     UserMixin,
     logout_user,
 )
