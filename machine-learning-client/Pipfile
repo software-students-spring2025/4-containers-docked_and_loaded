@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 pylint = "*"
 black = "*"
+pandas = "*"
+numpy = "*"
+openai = "*"
+pymongo = "*"
 
 [dev-packages]
 
