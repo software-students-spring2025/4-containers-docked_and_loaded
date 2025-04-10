@@ -1,8 +1,15 @@
+"""
+flask
+"""
+import os
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
+from flask_login import (
+    LoginManager,
+    login_user,
+    UserMixin,
+)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-import os
 
 app = Flask(__name__)
 app.secret_key = "your-secret-key"
@@ -45,6 +52,9 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    '''
+    login
+    '''
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -60,6 +70,9 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    '''
+    register
+    '''
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
