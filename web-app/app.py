@@ -1,6 +1,7 @@
 """
 flask
 """
+
 import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import (
@@ -25,13 +26,16 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
+
 class User(UserMixin):
     """
     flask-login
     """
+
     def __init__(self, user_id, username):
         self.id = user_id
         self.username = username
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -43,6 +47,7 @@ def load_user(user_id):
         return User(user_id=str(user["_id"]), username=user["username"])
     return None
 
+
 @app.route("/")
 def home():
     """
@@ -50,11 +55,12 @@ def home():
     """
     return "Hello! Go to /login or /register"
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    '''
+    """
     login
-    '''
+    """
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -70,9 +76,9 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    '''
+    """
     register
-    '''
+    """
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -81,15 +87,15 @@ def register():
         if existing_user:
             return render_template("register.html", message="Username already exists.")
 
-        user_id = mongo.db.users.insert_one({
-            "username": username,
-            "password": password
-        }).inserted_id
+        user_id = mongo.db.users.insert_one(
+            {"username": username, "password": password}
+        ).inserted_id
 
         login_user(User(user_id=str(user_id), username=username))
         return redirect(url_for("dashboard"))
 
     return render_template("register.html")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
