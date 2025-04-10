@@ -7,7 +7,11 @@ import os
 app = Flask(__name__)
 app.secret_key = "your-secret-key"
 
-app.config["MONGO_URI"] = f"mongodb://{os.getenv('MONGO_USER')}:{os.getenv('MONGO_PASS')}@{os.getenv('MONGO_HOST')}:{os.getenv('MONGO_PORT')}/{os.getenv('MONGO_DB')}?authSource=admin"
+app.config["MONGO_URI"] = (
+    f"mongodb://{os.getenv('MONGO_USER')}:{os.getenv('MONGO_PASS')}@"
+    f"{os.getenv('MONGO_HOST')}:{os.getenv('MONGO_PORT')}/"
+    f"{os.getenv('MONGO_DB')}?authSource=admin"
+)
 mongo = PyMongo(app)
 
 login_manager = LoginManager()
@@ -15,12 +19,18 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 class User(UserMixin):
+    """
+    flask-login
+    """
     def __init__(self, user_id, username):
         self.id = user_id
         self.username = username
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Load a user by ID from MongoDB.
+    """
     user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
     if user:
         return User(user_id=str(user["_id"]), username=user["username"])
@@ -28,6 +38,9 @@ def load_user(user_id):
 
 @app.route("/")
 def home():
+    """
+    Home
+    """
     return "Hello! Go to /login or /register"
 
 @app.route("/login", methods=["GET", "POST"])
