@@ -86,7 +86,11 @@ def register():
             return render_template("register.html")
 
         user_id = mongo.db.users.insert_one(
-            {"username": username, "password": generate_password_hash(password), "history": []}
+            {
+                "username": username,
+                "password": generate_password_hash(password),
+                "history": [],
+            }
         ).inserted_id
 
         login_user(User(user_id=str(user_id), username=username))
