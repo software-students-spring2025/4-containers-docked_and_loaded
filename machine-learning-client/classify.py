@@ -8,11 +8,13 @@ dotenv.load_dotenv()
 
 client = OpenAI()
 
+
 def encode_image(image_path):
     """Encode image from given file path to base64"""
 
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
+
 
 def classify_rps(image_path):
     """Classify image of player's hand as rock, paper, or scissors"""
@@ -28,7 +30,7 @@ def classify_rps(image_path):
             {
                 "role": "user",
                 "content": [
-                    { "type": "text", "text": prompt },
+                    {"type": "text", "text": prompt},
                     {
                         "type": "image_url",
                         "image_url": {
