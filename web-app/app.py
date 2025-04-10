@@ -99,6 +99,9 @@ def register():
 @app.route("/logout")
 @login_required
 def logout():
+    """
+    logout function
+    """
     logout_user()
     flash("You have been logged out.", "success")
     return redirect(url_for("login"))
