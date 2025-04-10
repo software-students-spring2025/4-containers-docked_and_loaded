@@ -10,6 +10,9 @@ pymongo = "*"
 tomli = "*"
 typing_extensions = "*"
 black = "*"
+flask-login = "*"
+flask-pymongo = "*"
+
 
 [dev-packages]
 

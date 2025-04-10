@@ -152,3 +152,4 @@ cython_debug/
 .env
 machine-learning-client/.env
 web-app/.env
+web-app/.venv
