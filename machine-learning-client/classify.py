@@ -42,4 +42,8 @@ def classify_rps(image_path):
         ],
     )
 
-    return completion.choices[0].message.content
+    classification = completion.choices[0].message.content
+
+    choices = {"rock": 1, "paper": 2, "scissors": 3}
+
+    return choices[classification.lower()]
