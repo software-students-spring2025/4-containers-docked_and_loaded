@@ -1,7 +1,7 @@
 """Flask"""
 
-from flask import Flask, request, jsonify
 import traceback
+from flask import Flask, request, jsonify
 from classify import classify_rps_base64
 
 

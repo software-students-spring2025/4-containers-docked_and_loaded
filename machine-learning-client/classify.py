@@ -1,6 +1,5 @@
 """Module to classify images of player for rock paper scissors game"""
 
-import base64
 from openai import OpenAI
 import dotenv
 
