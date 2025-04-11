@@ -128,6 +128,7 @@ def game1():
     """
     return render_template("game1.html")
 
+
 @app.route("/send-to-mlc", methods=["POST"])
 @login_required
 def send_to_mlc():
