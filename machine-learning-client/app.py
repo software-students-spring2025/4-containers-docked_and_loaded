@@ -7,6 +7,9 @@ app = Flask(__name__)
 
 @app.route("/classify", methods=["POST"])
 def classify():
+    """
+    classify
+    """
     data = request.get_json()
     image_base64 = data.get("image")
 

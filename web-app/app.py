@@ -131,6 +131,9 @@ def game1():
 @app.route("/send-to-mlc", methods=["POST"])
 @login_required
 def send_to_mlc():
+    """
+    send to mlc
+    """
     data = request.get_json()
     image_base64 = data.get("image")
 
