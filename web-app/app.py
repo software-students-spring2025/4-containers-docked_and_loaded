@@ -109,6 +109,13 @@ def logout():
     flash("You have been logged out.", "success")
     return redirect(url_for("login"))
 
+@app.route("/profile")
+@login_required
+def profile():
+    """
+    profile
+    """
+    return render_template("profile.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
