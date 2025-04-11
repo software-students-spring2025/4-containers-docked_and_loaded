@@ -4,36 +4,89 @@
   <meta charset="UTF-8">
   <title>Rock Paper Scissors</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aleo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'ALEO', serif;
+    }
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.1);
+    }
+    .btn {
+      width: 140px;
+    }
+    #preview {
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+    }
+    #result {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .stat-box {
+      font-size: 1.1rem;
+      background: #f8f9fa;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body class="bg-light">
-
-<div class="container text-center mt-5">
-  <h2>🎮 Rock Paper Scissors</h2>
-  <p>Use your webcam to play. Show your move and click "Play".</p>
-
-  <!-- Webcam -->
-  <video id="video" width="320" height="240" autoplay></video>
-  <br>
-
-  <!-- Buttons -->
-  <button class="btn btn-secondary mt-3" onclick="captureImage()">Capture</button>
-  <button class="btn btn-primary mt-3" onclick="sendToMLC()">Play</button>
-
-  <!-- Image -->
-  <div class="mt-3">
-    <img id="preview" style="max-width: 200px;" />
-  </div>
-
-  <!-- Result -->
-  <div class="mt-4">
-    <h4 id="result"></h4>
-  </div>
-</div>
+    <nav class="navbar navbar-light bg-white shadow-sm px-4">
+        <a href="{{ url_for('home') }}" class="navbar-brand mb-0 h1" style="font-size: 35px; text-decoration: none;">Game Hub</a>
+        <div class="d-flex align-items-center gap-2">
+            <a href="/profile">
+            <img src="{{ url_for('static', filename='avatar.png') }}" alt="Profile" width="35" height="35">
+            </a>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="card p-4 text-center">
+          <h2 class="mb-3">🎮 Rock Paper Scissors</h2>
+          <p class="text-muted">Use your webcam to play! 📸</p>
+          <p class="mb-1">1. Press <strong>Capture</strong> to lock in your move.</p>
+          <p class="mb-3">2. Press <strong>Play</strong> to see the result.</p>
+      
+          <!-- Webcam -->
+          <div class="text-center">
+            <video id="video" width="320" height="240" autoplay class="rounded shadow-sm mb-3"></video>
+          </div>
+      
+          <!-- Buttons -->
+          <div class="d-flex justify-content-center gap-3 mb-4">
+            <button class="btn btn-outline-secondary" onclick="captureImage()">📸 Capture</button>
+            <button class="btn btn-primary" onclick="sendToMLC()">🎲 Play</button>
+          </div>
+      
+          <!-- Image -->
+          <div>
+            <img id="preview" class="shadow-sm" style="max-width: 200px;" />
+          </div>
+      
+          <!-- Result -->
+          <div class="mt-4">
+            <h4 id="result" class="text-primary"></h4>
+          </div>
+      
+          <!-- Stats -->
+          <div class="mt-3">
+            <div class="stat-box">
+              🏆 Wins: <span id="wins">0</span> | ❌ Losses: <span id="losses">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+  
 
 <script>
   let imageBase64 = "";
 
-  // Access webcam
   navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
     document.getElementById("video").srcObject = stream;
   });
@@ -56,9 +109,6 @@
     return;
   }
 
-  console.log("📸 Sending to /send-to-mlc...");
-  console.log("🧾 Image preview (first 100 chars):", imageBase64.slice(0, 100));
-
   try {
     const response = await fetch("/send-to-mlc", {
       method: "POST",
@@ -67,12 +117,18 @@
     });
 
     const result = await response.json();
-    console.log("✅ Response from backend:", result);
 
     if (result.error) {
       document.getElementById("result").innerText = `Error: ${result.error}`;
     } else {
-      document.getElementById("result").innerText = `You played: ${convertMove(result.move)}`;
+      const playerMove = convertMove(result.move);
+      const aiMove = convertMove(result.ai_move);
+      const outcome = result.outcome.toUpperCase();
+
+      document.getElementById("result").innerText =
+        `You played: ${playerMove} | AI played: ${aiMove} → ${outcome}`;
+
+      loadStats();
     }
 
   } catch (err) {
@@ -82,6 +138,7 @@
 }
 
 
+
   function convertMove(num) {
     return {
       1: "Rock",
@@ -89,6 +146,16 @@
       3: "Scissors"
     }[num] || "Unknown";
   }
+
+async function loadStats() {
+    const response = await fetch("/rps-stats");
+    const stats = await response.json();
+    document.getElementById("wins").innerText = stats.wins;
+    document.getElementById("losses").innerText = stats.losses;
+}
+
+loadStats();
+
 </script>
 
 </body>
