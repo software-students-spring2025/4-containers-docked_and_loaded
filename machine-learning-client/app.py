@@ -1,9 +1,12 @@
+"""Flask"""
+
 from flask import Flask, request, jsonify
 import traceback
 from classify import classify_rps_base64
 
 
-app = Flask(__name__) 
+app = Flask(__name__)
+
 
 @app.route("/classify", methods=["POST"])
 def classify():
@@ -21,12 +24,13 @@ def classify():
 
     try:
         move = classify_rps_base64(image_base64)
-        print("✅ MLC classified:", move)
+        print("MLC classified:", move)
         return jsonify({"move": move})
-    except Exception as e:
+    except ValueError as e:
         print("MLC error:", str(e))
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
