@@ -3,6 +3,7 @@ flask
 """
 
 import os
+import random
 import requests
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import (
@@ -11,6 +12,7 @@ from flask_login import (
     login_required,
     UserMixin,
     logout_user,
+    current_user,
 )
 
 from flask_pymongo import PyMongo
@@ -21,6 +23,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 MLC_API_URL = os.getenv("MLC_API_URL", "http://mlc:8000/classify")
 app.secret_key = "your-secret-key"
+
 
 app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 mongo = PyMongo(app)
@@ -144,8 +147,54 @@ def send_to_mlc():
     response = requests.post(MLC_API_URL, json={"image": image_base64}, timeout=5)
     response.raise_for_status()
     move = response.json().get("move")
+    ai_move = random.randint(1, 3)
 
-    return jsonify({"move": move})
+    win_matrix = {1: 3, 2: 1, 3: 2}
+    if move == ai_move:
+        outcome = "tie"
+    elif win_matrix[move] == ai_move:
+        outcome = "win"
+    else:
+        outcome = "loss"
+
+    user_data = mongo.db.users.find_one({"_id": ObjectId(current_user.id)})
+    rps_data = user_data.get("rps", {"wins": 0, "losses": 0, "history": []})
+
+    if outcome == "win":
+        rps_data["wins"] += 1
+    elif outcome == "loss":
+        rps_data["losses"] += 1
+
+    rps_data.setdefault("history", []).append(
+        {"player_move": move, "ai_move": ai_move, "outcome": outcome}
+    )
+
+    mongo.db.users.update_one(
+        {"_id": ObjectId(current_user.id)}, {"$set": {"rps": rps_data}}
+    )
+
+    return jsonify({"move": move, "ai_move": ai_move, "outcome": outcome})
+
+
+@app.route("/rps-stats")
+@login_required
+def rps_stats():
+    """
+    rpsstats
+    """
+    user = mongo.db.users.find_one({"_id": ObjectId(current_user.id)})
+    stats = user.get("rps", {"wins": 0, "losses": 0})
+    return jsonify(stats)
+
+
+@app.route("/game1h")
+@login_required
+def game1h():
+    """
+    game1history"""
+    user = mongo.db.users.find_one({"_id": ObjectId(current_user.id)})
+    rps_data = user.get("rps", {"history": []})
+    return render_template("game1h.html", history=rps_data["history"])
 
 
 if __name__ == "__main__":

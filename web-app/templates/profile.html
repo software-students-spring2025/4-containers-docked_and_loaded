@@ -35,6 +35,7 @@
   <nav class="navbar navbar-light bg-white shadow-sm px-4">
     <a href="{{ url_for('home') }}" class="navbar-brand mb-0 h1" style="font-size: 35px; text-decoration: none;">Game Hub</a>
     <div class="d-flex align-items-center gap-2">
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
     </div>
   </nav>
 
@@ -46,14 +47,14 @@
       <div class="col-md-5">
         <div class="card game-card text-center p-4">
           <h2 class="card-title mb-5">🪨 🗒️ ✂️<br>Rock Paper Scissors</h2>
-          <a href="/game1" class="btn btn-primary mb-0">View History</a>
+          <a href="{{ url_for('game1h') }}" class="btn btn-primary mb-0">View History</a>
         </div>
       </div>
 
       <div class="col-md-5">
         <div class="card game-card text-center p-4">
           <h2 class="card-title mb-5">🧐<br>Trivia</h2>
-          <a href="/game2" class="btn btn-primary mb-0">View History</a>
+          <a href="/game2h" class="btn btn-primary mb-0">View History</a>
         </div>
       </div>
     </div>
