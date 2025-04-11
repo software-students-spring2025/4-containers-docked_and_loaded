@@ -140,7 +140,7 @@ def send_to_mlc():
     if not image_base64:
         return jsonify({"error": "No image received"}), 400
 
-    response = requests.post(MLC_API_URL, json={"image": image_base64})
+    response = requests.post(MLC_API_URL, json={"image": image_base64}, timeout=5)
     response.raise_for_status()
     move = response.json().get("move")
 
