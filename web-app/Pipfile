@@ -12,6 +12,9 @@ typing_extensions = "*"
 black = "*"
 flask-login = "*"
 flask-pymongo = "*"
+python-dotenv = "*"
+requests = "*"
+
 
 
 [dev-packages]

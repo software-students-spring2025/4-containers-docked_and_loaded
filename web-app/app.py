@@ -3,7 +3,8 @@ flask
 """
 
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+import requests
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import (
     LoginManager,
     login_user,
@@ -18,6 +19,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
+MLC_API_URL = os.getenv("MLC_API_URL", "http://mlc:8000/classify")
 app.secret_key = "your-secret-key"
 
 app.config["MONGO_URI"] = os.getenv("MONGO_URI")
@@ -117,6 +119,29 @@ def profile():
     profile
     """
     return render_template("profile.html")
+
+
+@app.route("/game1")
+def game1():
+    """
+    game1
+    """
+    return render_template("game1.html")
+
+@app.route("/send-to-mlc", methods=["POST"])
+@login_required
+def send_to_mlc():
+    data = request.get_json()
+    image_base64 = data.get("image")
+
+    if not image_base64:
+        return jsonify({"error": "No image received"}), 400
+
+    response = requests.post(MLC_API_URL, json={"image": image_base64})
+    response.raise_for_status()
+    move = response.json().get("move")
+
+    return jsonify({"move": move})
 
 
 if __name__ == "__main__":
