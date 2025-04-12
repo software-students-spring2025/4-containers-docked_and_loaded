@@ -3,7 +3,6 @@ flask
 """
 
 import os
-import random
 import requests
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import (
@@ -19,9 +18,9 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
 app = Flask(__name__)
 MLC_API_URL = os.getenv("MLC_API_URL", "http://mlc:8000/classify")
+MLC_BOT_URL = os.getenv("MLC_BOT_URL", "http://mlc:8000/bot_play")
 app.secret_key = "your-secret-key"
 
 
@@ -147,7 +146,9 @@ def send_to_mlc():
     response = requests.post(MLC_API_URL, json={"image": image_base64}, timeout=5)
     response.raise_for_status()
     move = response.json().get("move")
-    ai_move = random.randint(1, 3)
+    ai_response = requests.post(MLC_BOT_URL, json={"_id": current_user.id}, timeout=5)
+    ai_response.raise_for_status()
+    ai_move = ai_response.json().get("move")
 
     win_matrix = {1: 3, 2: 1, 3: 2}
     if move == ai_move:

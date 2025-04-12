@@ -5,6 +5,7 @@ import random
 import os
 from collections import Counter
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 
 def play_random():
@@ -48,21 +49,27 @@ def predict(last_played, conditionals, counts, total_games):
     return play_random()
 
 
-def play_nb(user):
+def play_nb(user_id):
     """Play based off of the user's history using Naive Bayes classifier"""
     client = MongoClient(os.getenv("MONGO_URI"))
     db = client[os.getenv("DB_NAME")]
     collection = db["users"]
 
-    user = collection.find_one({"username": user})
-    user_history = user["history"]
+    user = collection.find_one({"_id": ObjectId(user_id)})
+    try:
+        history = user["history"]
 
-    if not user_history:
+        user_history = [x["player_move"] for x in history]
+
+        if not user_history:
+            return play_random()
+
+        last_played = user_history[-1]
+        total_games = len(user_history)
+        counts = Counter(user_history)
+        conditionals = get_conditionals(last_played, user_history)
+
+    except KeyError:
         return play_random()
-
-    last_played = user_history[-1]
-    total_games = len(user_history)
-    counts = Counter(user_history)
-    conditionals = get_conditionals(last_played, user_history)
 
     return predict(last_played, conditionals, counts, total_games)
