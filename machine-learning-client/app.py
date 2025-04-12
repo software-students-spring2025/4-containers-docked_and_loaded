@@ -3,7 +3,7 @@
 import traceback
 from flask import Flask, request, jsonify
 from classify import classify_rps_base64
-
+import play_rps
 
 app = Flask(__name__)
 
@@ -25,6 +25,22 @@ def classify():
     try:
         move = classify_rps_base64(image_base64)
         print("MLC classified:", move)
+        return jsonify({"move": move})
+    except ValueError as e:
+        print("MLC error:", str(e))
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/bot_play", methods=["POST"])
+def bot_play():
+    """
+    get bot rps move
+    """
+    data = request.get_json()
+
+    try:
+        move = play_rps.play_nb(data.get("_id"))
         return jsonify({"move": move})
     except ValueError as e:
         print("MLC error:", str(e))
