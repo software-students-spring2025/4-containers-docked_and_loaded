@@ -1,7 +1,5 @@
-
-![Web App Build](https://github.com/AndrewJung03/docked_and_loaded/actions/workflows/web-app.yml/badge.svg)
-![ML Client Build](https://github.com/AndrewJung03/docked_and_loaded/actions/workflows/mlc.yml/badge.svg)
-
+![Web App Build](https://github.com/software-students-spring2025/4-containers-docked_and_loaded/actions/workflows/web-app.yml/badge.svg)
+![ML Client Build](https://github.com/software-students-spring2025/4-containers-docked_and_loaded/actions/workflows/mlc.yml/badge.svg)
 ![Lint-free](https://github.com/nyu-software-engineering/containerized-app-exercise/actions/workflows/lint.yml/badge.svg)
 
 ## Description
@@ -25,16 +23,4 @@ Build a containerized app that uses machine learning. See [instructions](./instr
 
 ## 🔧 Environment Setup
 
-Each service in this project requires its own `.env` file to configure the MongoDB connection.  
-
-Use the provided `env.example` files in each directory to create your own `.env` files:
-
-### 1. Machine Learning Client
-
-- Path: `machine-learning-client/.env`
-- Template: `machine-learning-client/env.example`
-
-### 2. Web App
-
-- Path: `web-app/.env`
-- Template: `web-app/env.example`
+Place the .env file in the root directory
