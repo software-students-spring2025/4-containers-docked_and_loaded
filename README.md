@@ -1,5 +1,5 @@
 ![Web App Build](https://github.com/software-students-spring2025/4-containers-docked_and_loaded/actions/workflows/web-app.yml/badge.svg)
-![ML Client Build](https://github.com/software-students-spring2025/4-containers-docked_and_loaded/actions/workflows/mlc.yml/badge.svg)
+![ML Client Build](https://github.com/software-students-spring2025/4-containers-docked_and_loaded/actions/workflows/machine-learning-client.yml/badge.svg)
 ![Lint-free](https://github.com/nyu-software-engineering/containerized-app-exercise/actions/workflows/lint.yml/badge.svg)
 
 ## Description
