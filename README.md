@@ -1,11 +1,13 @@
 
-![Workflow Status](https://github.com/kdusling56/software-students-spring2025/4-containers-docked_and_loaded/actions/workflows/event-logger.yml/badge.svg)
-
+![Web App Build](https://github.com/AndrewJung03/docked_and_loaded/actions/workflows/web-app.yml/badge.svg)
+![ML Client Build](https://github.com/AndrewJung03/docked_and_loaded/actions/workflows/mlc.yml/badge.svg)
 
 ![Lint-free](https://github.com/nyu-software-engineering/containerized-app-exercise/actions/workflows/lint.yml/badge.svg)
 
 ## Description
 The Rock-Paper-Scissors Camera Game is an interactive application that utilizes a camera to allow users to play the classic game of rock-paper-scissors against a computer opponent. The application uses computer vision to recognize hand gestures representing rock, paper, or scissors, providing a fun and engaging way for users to play the game
+
+![Gameplay Demo](./gif/gif3.gif)
 
 # User Stories
 - As a user, I want to start the game by clicking a "Start" button so that I can begin playing rock-paper-scissors against the computer.
