@@ -23,4 +23,4 @@ Build a containerized app that uses machine learning. See [instructions](./instr
 
 ## 🔧 Environment Setup
 
-Place the .env file in the root directory
+Place the .env file in the root directory. .env was sent in the team's discord channel.
