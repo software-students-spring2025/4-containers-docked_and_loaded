@@ -23,6 +23,11 @@ The Rock-Paper-Scissors Camera Game is an interactive application that utilizes 
 
 # Instructions 
 
+To launch the application, run the following command in your terminal from the project root:
+
+```bash
+docker-compose up --build
+
 ## 🔧 Environment Setup
 
 Place the .env file in the root directory. .env was sent in the team's discord channel.
